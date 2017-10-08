@@ -34,7 +34,7 @@ if (!empty($_POST['titles'])) {
     $html = file_get_html("C:/xampp/htdocs/nzkextractor/index.html");
 
     foreach ($html->find('tr') as $tr) {
-        $title = $tr->find('a', 1)->plaintext;
+        $title = $tr->find('td', 1)->plaintext;
         $title_no = $count;
         $title = trim($title);
 
@@ -85,7 +85,7 @@ if (!empty($_POST['verses'])) {
             $html = file_get_html($file_path);
             $index = 1;
 
-            foreach ($html->find('.authority_columns', 0)->find('p') as $element) {
+            foreach ($html->find('.tenzi', 0)->find('p') as $element) {
 
                 // remove unwanted html tags
 //                foreach ($html->find('a') as $removed) {
@@ -93,9 +93,10 @@ if (!empty($_POST['verses'])) {
 //                }
 
                 $verse_text = str_get_html($element->innertext);
-                $verse_text = preg_replace("/^(\d+)./m", "<font color='#FF6F00'>$1. </font>", $verse_text);
+                $verse_text = trim($verse_text);
+                $verse_text = preg_replace("/^(\d+)./m", '<font color="#FF6F00">$1. </font>', $verse_text);
 
-                $verse_text = str_replace("<em>", "<em><font color='#2196F3'>", $verse_text);
+                $verse_text = str_replace("<em>", '<em><font color="#2196F3">', $verse_text);
                 $verse_text = str_replace('</em>', '</font></em>', $verse_text);
 //                $verse_text = SQLite3::escapeString($verse_text);
 
@@ -108,15 +109,17 @@ if (!empty($_POST['verses'])) {
                     $verse_no = $index;
                     $verse_id = $title_no . str_pad($verse_no, 3, "0", STR_PAD_LEFT);
 
-                    $part = $part . '(' . $verse_id . ', ' . $title_no . ', ' . $verse_no . ', "' . $verse_text . '"),';
-//                    $part = $part . "({$verse_id}, {$title_no}, {$verse_no}, '{$verse_text}'),";
+//                    $part = $part . '(' . $verse_id . ', ' . $title_no . ', ' . $verse_no . ', "' . $verse_text . '"),';
+                    $part = $part . "({$verse_id}, {$title_no}, {$verse_no}, '{$verse_text}'),";
                     $index++;
                 }
             }
         }
     }
 
-    $build_query = "INSERT INTO verses (id, title_no, verse_no, verse_text) VALUES " . substr(trim($part), 0, -1);
+    $build_query = 'INSERT INTO verses (id, title_no, verse_no, verse_text) VALUES ' . substr(trim($part), 0, -1);
+//    echo $build_query;
+//    exit;
 //    $build_query = $db->escapeString($build_query);
     $db->exec($build_query);
 
