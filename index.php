@@ -12,10 +12,12 @@ $db = new MyDB();
 
 if (!empty($_POST['titles'])) {
 
-    $has_audio = array(1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 17, 18, 20, 22, 23, 24, 29, 31, 32, 33, 36, 37, 38, 39, 40, 42, 45, 46,
-        50, 51, 54, 55, 57, 58, 60, 61, 65, 66, 67, 69, 70, 71, 72, 73, 77, 78, 79, 80, 81, 82, 83, 84, 86, 87, 89, 93, 95, 96, 97,
-        101, 103, 104, 107, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 125, 126, 127, 128, 130, 131, 133, 135, 136, 137, 140,
-        141, 142, 143, 144, 145, 146, 149);
+//    $has_audio = array(1, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 17, 18, 20, 22, 23, 24, 29, 31, 32, 33, 36, 37, 38, 39, 40, 42, 45, 46,
+//        50, 51, 54, 55, 57, 58, 60, 61, 65, 66, 67, 69, 70, 71, 72, 73, 77, 78, 79, 80, 81, 82, 83, 84, 86, 87, 89, 93, 95, 96, 97,
+//        101, 103, 104, 107, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 125, 126, 127, 128, 130, 131, 133, 135, 136, 137, 140,
+//        141, 142, 143, 144, 145, 146, 149);
+    
+    $has_audio = array();
 
     $db->exec("DROP TABLE IF EXISTS songs");
     $sql = 'CREATE TABLE "songs" (
@@ -29,7 +31,7 @@ if (!empty($_POST['titles'])) {
 
     echo "Importing song titles <br/>";
 
-    $html = file_get_html("C:/xampp/htdocs/bellsextractor/index.html");
+    $html = file_get_html("C:/xampp/htdocs/nzkextractor/index.html");
 
     foreach ($html->find('tr') as $tr) {
         $title = $tr->find('a', 1)->plaintext;
@@ -61,7 +63,7 @@ if (!empty($_POST['verses'])) {
 
     echo "Import verses to SQLite db <br/>";
 
-    $path = realpath('C:/xampp/htdocs/bellsextractor/hymns');
+    $path = realpath('C:/xampp/htdocs/nzkextractor/tenzi');
     $iterator = new DirectoryIterator($path);
 //    $iterator->setFlags(DirectoryIterator::SKIP_DOTS);
     $objects = new IteratorIterator($iterator);
@@ -124,7 +126,7 @@ if (!empty($_POST['verses'])) {
 class MyDB extends SQLite3 {
 
     function __construct() {
-        $this->open('bells.db');
+        $this->open('tenzi.db');
     }
 
 }
