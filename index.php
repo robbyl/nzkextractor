@@ -96,7 +96,7 @@ if (!empty($_POST['verses'])) {
                 $verse_text = trim($verse_text);
                 $verse_text = preg_replace("/^(\d+)./m", '<font color="#FF6F00">$1. </font>', $verse_text);
 
-                $verse_text = str_replace("<em>", '<em><font color="#2196F3">', $verse_text);
+                $verse_text = str_replace("<em>", '<em><font color="#997300">', $verse_text);
                 $verse_text = str_replace('</em>', '</font></em>', $verse_text);
 //                $verse_text = SQLite3::escapeString($verse_text);
 
